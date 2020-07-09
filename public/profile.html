@@ -1,0 +1,131 @@
+<html ng-app="FacultiesApp">
+ 
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+    <script src="./js/faculties-app.js" type="text/javascript"></script>
+    <script src="./js/faculties-controller.js" type="text/javascript"></script>
+</head>
+<body ng-controller="FacultiesController">
+    <div class="container">
+        <div class="row justify-content-center">
+            <h1>FacultyApp</h1>
+        </div>
+        <hr>
+        <div class="row" style="margin: 15px">
+            <label>API Token</label>
+            <input type="text" class="form-control" placeholder="JWT token" aria-label="token" aria-describedby="basic-addon2" ng-model="token" ng-change="setToken()">
+            <div>
+                <h2>Token info</h2>
+                <p>ID: {{ tokenInfo._id }}</p>
+                <p>EMAIL: {{ tokenInfo.email }}</p>
+                <p>Valid from: {{ tokenInfo.valid_from }}</p>
+                <p>Valid Until: {{ tokenInfo.valid_until }}</p>
+                <button class="btn btn-warning" type="button" ng-click="logoff()">Logoff</button>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Facultie ID" aria-label="Facultie ID" aria-describedby="basic-addon2" ng-model="facultieId">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" ng-click="loadOneFacultie()">Load Facultie</button>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-danger" type="button" ng-click="removeOneFacult()">Delete Facultie</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" ng-if="facultie != undefined">
+                <h5 class="card-title">ID: {{facultie.university_id}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Name: {{facultie.faculty_name}}</h6>
+                <p class="card-text"><b>Address:</b> {{facultie.faculty_address}}</p>
+                <p class="card-text"><b>Foundation:</b> {{facultie.foundation_year}}</p>
+                <p class="card-text"><b>Students:</b> {{facultie.students}}</p>
+                <p class="card-text"><b>Degrees:</b></p>
+                <ul class="list-group" ng-repeat="degrees in facultie.degrees">
+                      <li class="list-group-item"><br>ID:</b> {{degrees}}</li>
+                </ul>
+                <p class="card-text"><b>Research Group:</b></p>
+                <ul class="list-group" ng-repeat="research_groups in facultie.research_groups">
+                  <li class="list-group-item"><br>ID:</b> {{research_groups}}</li>
+              </ul>
+              <button type="submit" class="btn btn-danger" ng-click="removeOneFacultie(facultie._id)">Delete</button>
+              <button type="submit" class="btn btn-primary mb-2" ng-click="update(facultie)">Update</button>
+              </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="title">ID university</label>
+                <input type="text" class="form-control" id="title" ng-model="newFacultie.university_id" placeholder="UMA">
+            </div>
+            <div class="form-group">
+                <label for="title">Name university</label>
+                <input type="text" class="form-control" id="title" ng-model="newFacultie.faculty_name" placeholder="Facultad de Medicina">
+            </div> 
+            <div class="form-group">
+                <label for="title">Address university</label>
+                <input type="text" class="form-control" id="title" ng-model="newFacultie.faculty_address" placeholder="Address Facultad de Medicina">
+            </div>
+            <div class="form-group">
+                <label for="title">Foundation university</label>
+                <input type="number" class="form-control" id="title" ng-model="newFacultie.foundation_year">
+            </div>
+            <div class="form-group">
+                <label for="title">students faculty</label>
+                <input type="number" class="form-control" id="title" ng-model="newFacultie.students">
+            </div>
+            <div class="form-group">
+                <label for="title">Degrees faculty</label>
+                <input type="text" placeholder="12,55,87" class="form-control" id="title" ng-model="newFacultie.degrees">
+            </div>
+            <div class="form-group">
+                <label for="title">Research Group faculty</label>
+                <input type="text" placeholder="12,55,87" class="form-control" id="title" ng-model="newFacultie.research_groups">
+            </div>                                       
+            <button type="submit" class="btn btn-primary mb-2" ng-click="addFaculty()">Add Movie</button>
+            <button type="submit" class="btn btn-warning mb-2" ng-click="updateFaculty()">Update Movie</button>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary mb-2" ng-click="loadFaculties()">Load all faculties</button>
+            <button type="submit" class="btn btn-primary mb-2" ng-click="faculties = undefined">Hide all faculties</button>
+            <button class="btn btn-danger" type="button" ng-click="removeAll()">Delete All Facultie</button>
+
+            <div class="row" style="margin: 15px">
+                <div ng-if="faculties != undefined">
+                    <h2>Lista de Facultades</h2>
+                    <input type="text" class="form-control" placeholder="filtro de busqueda" aria-label="token" aria-describedby="basic-addon2" ng-model="filtro">
+                    <div>
+                        <div class="col-md-12" ng-repeat="facultie in faculties | filter : filtro">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                  <h5 class="card-title">ID: {{facultie.university_id}}</h5>
+                                  <h6 class="card-subtitle mb-2 text-muted">objectId: {{facultie._id}}</h6>
+                                  <h6 class="card-subtitle mb-2 text-muted">Name: {{facultie.faculty_name}}</h6>
+                                  <p class="card-text"><b>Address:</b> {{facultie.faculty_address}}</p>
+                                  <p class="card-text"><b>Foundation:</b> {{facultie.foundation_year}}</p>
+                                  <p class="card-text"><b>Students:</b> {{facultie.students}}</p>
+                                  <p class="card-text"><b>Degrees:</b></p>
+                                  <ul class="list-group" ng-repeat="degrees in facultie.degrees">
+                                        <li class="list-group-item"><br>ID:</b> {{degrees}}</li>
+                                  </ul>
+                                  <p class="card-text"><b>Research Group:</b></p>
+                                  <ul class="list-group" ng-repeat="research_groups in facultie.research_groups">
+                                    <li class="list-group-item"><br>ID:</b> {{research_groups}}</li>
+                                </ul>
+                                <button type="submit" class="btn btn-primary mb-2" ng-click="removeOneFacultie(facultie._id)">Eliminar</button>
+                                <button type="submit" class="btn btn-primary mb-2" ng-click="loadUpdateForm(facultie)">Modificar</button>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

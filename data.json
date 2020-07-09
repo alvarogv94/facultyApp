@@ -1,0 +1,41 @@
+[{  
+    "university_id": "US",
+    "research_groups": [102, 106],
+    "faculty_name": "Facultad de Derecho",
+    "faculty_address": "Cl. Enramadilla, 18, 20, 41018 Sevilla",
+    "foundation_year": 1505,
+    "degrees": [25, 29, 34],
+    "students": 2550
+}, {  
+    "university_id": "UPO",
+    "research_groups": [102, 106],
+    "faculty_name": "Facultad de Derecho",
+    "faculty_address": "Ctra. de Utrera, km. 1 41013, Sevilla",
+    "foundation_year": 1991,
+    "degrees": [25, 29, 34],
+    "students": 1243
+}, {  
+    "university_id": "US",
+    "research_groups": [35, 45, 47, 83],
+    "faculty_name": "Facultad de Física",
+    "faculty_address": "Av. Reina Mercedes s/n Sevilla",
+    "foundation_year": 1978,
+    "degrees": [11, 15, 18],
+    "students": 566
+}, {  
+    "university_id": "UGR",
+    "research_groups": [35, 45, 47, 83],
+    "faculty_name": "Facultad de Ciencias",
+    "faculty_address": "Avenida de Fuente Nueva, s/n, 18071 Granada",
+    "foundation_year": 1913,
+    "degrees": [8, 11, 15, 18, 23],
+    "students": 1682
+}, {  
+    "university_id": "UMA",
+    "research_groups": [35, 45, 47, 83],
+    "faculty_name": "Facultad de Ciencias",
+    "faculty_address": "Bulevar Louis Pasteur, 31, 29010 Málaga",
+    "foundation_year": 1970,
+    "degrees": [5, 10, 11, 17, 18],
+    "students": 1206
+}]
