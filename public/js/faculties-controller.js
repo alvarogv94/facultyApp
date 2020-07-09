@@ -11,8 +11,13 @@ angular.module("FacultiesApp").controller("FacultiesController", function($scope
     };
 
     $scope.addFaculty = function() {
-        $scope.newFacultie.research_groups = $scope.newFacultie.research_groups.split(',');
-        $scope.newFacultie.degrees = $scope.newFacultie.degrees.split(','); 
+        if($scope.newFacultie.research_groups != undefined) {
+            $scope.newFacultie.research_groups = $scope.newFacultie.research_groups.split(',');
+        }
+
+        if($scope.newFacultie.degrees != undefined) {
+            $scope.newFacultie.degrees = $scope.newFacultie.degrees.split(','); 
+        }
 
         $http.post("/faculties", $scope.newFacultie)
                 .then(function(response) {
