@@ -48,7 +48,6 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
             });
         }
 
-        console.log('req.user', req.user);
         req.app.io.emit('newFaculty', {
             msg: 'A new faculty has been added!',
             data: req.user.email
